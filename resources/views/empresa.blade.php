@@ -1,4 +1,4 @@
-h@extends('layout.app')
+@extends('layouts.app')
 @section('titulopagina','Empresa E-commerce')
 @push('css')
     <style>

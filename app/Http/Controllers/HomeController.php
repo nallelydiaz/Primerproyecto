@@ -23,7 +23,7 @@ class HomeController extends Controller
         $datos["texto_ejemplo"]="Aquí va la descripción del texto de ejemplo";
         
         $usuarios=new Pagina();
-        $datos["lisatdousuarios"]=$usuarios->ObtenerListado();
+        $datos["listadousuarios"]=$usuarios->ObtenerListado();
         return view('empresa', $datos);
 
     }

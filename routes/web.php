@@ -92,6 +92,17 @@ Route::get('Obtenerestatus',function(){
     dd($post->is_active);
 });
 
+// el siguiente metodo se debe de llamar mediante a un metodo de tipo request (por ejemplo, utilizando AJAX o Postman)
+Route::put('/actualizar-dato/{id}',[HomeController::class,'update'])->name('dato.update');
+
+// metodos para las eliminaciones logicas(recargo y ya no me debe de salir en la tabla) y fisica(me elimina registro de la base de)
+// Eliminación lógica: cambia is_active de 1 a 0
+Route::post('/eliminacion-logica/{id}', [HomeController::class, 'eliminacionLogica'])->name('dato.eliminacion.logica');
+
+// Eliminación física: borra el registro de la BD
+Route::post('/eliminacion-fisica/{id}', [HomeController::class, 'eliminacionFisica'])->name('dato.eliminacion.fisica');
+
+
 
 
 Route::get('/', function () {

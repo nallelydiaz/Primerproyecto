@@ -27,4 +27,54 @@ class HomeController extends Controller
         return view('empresa', $datos);
 
     }
+
+    public function update(Request $request){
+        $usuarios=new Pagina();
+        $respuesta=$usuarios->BuscarId($request->id);
+        if(!empty($respuesta)){
+            $respuesta->name=$request->name;
+            $respuesta->calle=$request->calle;
+            $respuesta->save();
+        }
+        return $respuesta;
+    }
+
+    public function eliminacionLogica($id)
+{
+    $usuario = Pagina::find($id);
+
+    if (!empty($usuario)) {
+        $usuario->is_active = 0;
+        $usuario->save();
+        return response()->json([
+            'success' => true,
+            'mensaje' => 'Registro desactivado correctamente'
+        ]);
+    }
+
+    return response()->json([
+        'success' => false,
+        'mensaje' => 'Registro no encontrado'
+    ], 404);
+}
+
+public function eliminacionFisica($id)
+{
+    $usuario = Pagina::find($id);
+
+    if (!empty($usuario)) {
+        $usuario->delete();
+        return response()->json([
+            'success' => true,
+            'mensaje' => 'Registro eliminado permanentemente'
+        ]);
+    }
+
+    return response()->json([
+        'success' => false,
+        'mensaje' => 'Registro no encontrado'
+    ], 404);
+}
+
+
 }

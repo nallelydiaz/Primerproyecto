@@ -3,6 +3,7 @@
 <head>
   <title>@yield('titulopagina')</title>
   <meta charset="utf-8">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet"
@@ -117,10 +118,36 @@
     <i class="fa-brands fa-tiktok"></i>
 </div>
 
+<div class="modal" tabindex="-1" id="myModal" role="dialog">
+  <form id="editForm" method="POST">
+    @csrf @method('PUT')
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">@yield('titulo_modal')</h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type='hidden' name='id' id='id'>
+          <input type='text' name='name' id='name' class="form-control">
+          <input type='text' name='calle' id='calle' class="form-control">
+          <p>Modal body text goes here.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
 </body>
 </html>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<script src="https://cdn.datatables.net/2.3.7/js/dataTables.js"></>
+<script src="https://cdn.datatables.net/2.3.7/js/dataTables.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     $(document).ready(function () {
@@ -129,8 +156,88 @@
                 { data: 'name' },
                 { data: 'email' },
                 { data: 'telefono' },
-                { data: 'calle' }
+                { data: 'calle' },
+                { data: 'acciones'}
+
         ]
     });
 });
+
+
+  function carga_modal(id, nombre, calle){
+    $('#id').val(id);
+    $('#name').val(nombre);
+    $("#calle").val(calle);
+    $("#editForm").attr('action','/actualizar-dato/'+id);
+    $('#myModal').modal('show');
+}
+
+$("#editForm").on('submit',function(e){
+    e.preventDefault();
+    alert($(this).serialize());
+    $.ajax({
+        url:$(this).attr('action'),
+        type:'POST',
+        method:'PUT',
+        data:$(this).serialize(),
+        success: function(response){
+            //console.log(response);
+            $("#myModal").modal('hide');
+            location.reload();
+        },
+        error:function(xhr){
+            console.log(xhr.responseText);
+        }
+    })
+})
+
+// Eliminación lógica: pone is_active = 0
+function eliminacion_logica(id) {
+    if (!confirm('¿Deseas desactivar este registro? Ya no será visible en el listado.')) {
+        return;
+    }
+
+    $.ajax({
+        url: '/eliminacion-logica/' + id,
+        type: 'POST',
+        data: {
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+            alert(response.mensaje);
+            location.reload();
+        },
+        error: function (xhr) {
+            console.log(xhr.responseText);
+            alert('Error al desactivar el registro.');
+        }
+    });
+}
+
+// Eliminación física: borra el registro de la BD
+function eliminacion_fisica(id) {
+    if (!confirm('¿Estás SEGURO de eliminar este registro? Esta acción NO se puede deshacer.')) {
+        return;
+    }
+
+    $.ajax({
+        url: '/eliminacion-fisica/' + id,
+        type: 'POST',
+        data: {
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+            alert(response.mensaje);
+            location.reload();
+        },
+        error: function (xhr) {
+            console.log(xhr.responseText);
+            alert('Error al eliminar el registro.');
+        }
+    });
+}
+
+
+
+
 </script>

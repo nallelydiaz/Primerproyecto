@@ -25,7 +25,7 @@
 @section('titulo1')
     <h1>About Me</h1>
 @endsection
-@section("descripción_about")
+@section("descripcion_about")
     {{$descripcion_about}}
 @endsection
 @section("Autor")
@@ -46,6 +46,7 @@
                         <th>Email</th>
                         <th>Teléfono</th>
                         <th>Calle</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,6 +56,23 @@
                         <td>{{$usuario->email}}</td>
                         <td>{{$usuario->telefono}}</td>
                         <td>{{$usuario->calle}}</td>
+                        <td>
+                        <button class='btn btn-primary' onclick="carga_modal({{$usuario->id}},'{{$usuario->name}}', '{{$usuario->calle}}')" data-id="{{$usuario->id}}"
+                        data-nombre="{{$usuario->name}}" data-calle="{{$usuario->calle}}"
+                        data-toggle="modal" data-target="#myModal"><span class="fa fa-pencil"></span>
+                        </button>
+                        {{-- Botón Eliminación Lógica (cambia is_active a 0) --}}
+                        <button class='btn btn-warning' 
+                        onclick="eliminacion_logica({{$usuario->id}})">
+                        <span class="fa fa-eye-slash"></span>
+                        </button>
+
+                        {{-- Botón Eliminación Física (borra el registro de la BD) --}}
+                        <button class='btn btn-danger' 
+                        onclick="eliminacion_fisica({{$usuario->id}})">
+                        <span class="fa fa-trash"></span>
+                        </button>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

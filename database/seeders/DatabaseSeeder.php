@@ -17,9 +17,20 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+        /*User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+        ]);*/
+        /*Laravel Seeders*/
+        $user=new User();
+        $user->name='Nallely Diaz Jimenez';
+        $user->email='agongoraescalante@gmail.com';
+        $user->password=bcrypt('123456');
+        $user->save();
+
+        //dentro de el parametro this voy a llamar el archivo paginaseeder
+        $this->call([
+            PaginasSeeder::class
         ]);
     }
 }

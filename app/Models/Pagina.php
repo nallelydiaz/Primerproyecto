@@ -4,14 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 
 class Pagina extends Model
 {
+    use HasFactory;
+
     protected $table='paginas';
 //creamos un atributo mediante cast para el guardado y la obtencion de los datos
 
-    protected function casts():array{ //casts- cuando llame a alguna consuklta y asiganrle un formato, es como el get,se pide el arreglo y el formato que yo quiera
+    protected function casts():array{ //casts- cuando llame a alguna consulta y asiganrle un formato, es como el get,se pide el arreglo y el formato que yo quiera
         return [ 
             'created_at'=>'datetime:d-m-Y',
             'is_active'=>'boolean'

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Pagina;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -28,9 +29,14 @@ class DatabaseSeeder extends Seeder
         $user->password=bcrypt('123456');
         $user->save();
 
+        Pagina::factory(100)->create();
+
+
         //dentro de el parametro this voy a llamar el archivo paginaseeder
+        /*
         $this->call([
             PaginasSeeder::class
         ]);
+        */
     }
 }
